@@ -20,7 +20,7 @@ class Revenue(models.Model):
         return f"{self.description} - {self.value} - {self.date}"
 
     def save(self, *args, **kwargs):
-        if revenue_filter_by_description(self.description) and revenue_filter_by_date(self.date):
+        if Revenue.objects.filter(description=self.description, date=self.date):
             raise ValueError("Registro Duplicado !")
         elif not revenue_filter_by_description(self.description):  # Create/Update a registry
             super().save(*args, **kwargs)
@@ -57,7 +57,7 @@ class Expense(models.Model):
         return f"{self.description} - {self.value} - {self.date}"
 
     def save(self, *args, **kwargs):
-        if expense_filter_by_description(self.description) and expense_filter_by_date(self.date):
+        if Expense.objects.filter(description=self.description, date=self.date):
             raise ValueError("Registro Duplicado !")
         elif not expense_filter_by_description(self.description):  # Create/Update a registry
             super().save(*args, **kwargs)
