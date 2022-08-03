@@ -12,9 +12,9 @@ def revenue_filter_by_date(date):
 
 
 class Revenue(models.Model):
-    description = models.CharField(max_length=200)
-    value = models.FloatField()
-    date = models.DateField()
+    description = models.CharField(max_length=200, blank=False)
+    value = models.FloatField(blank=False)
+    date = models.DateField(blank=False)
 
     def __str__(self):
         return f"{self.description} - {self.value} - {self.date}"
@@ -49,9 +49,9 @@ def expense_filter_by_date(date):
 
 
 class Expense(models.Model):
-    description = models.CharField(max_length=200, unique_for_month="date")
-    value = models.FloatField()
-    date = models.DateField()
+    description = models.CharField(max_length=200, blank=False)
+    value = models.FloatField(blank=False)
+    date = models.DateField(blank=False)
 
     def __str__(self):
         return f"{self.description} - {self.value} - {self.date}"
