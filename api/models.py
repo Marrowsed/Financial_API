@@ -9,7 +9,17 @@ class Revenue(models.Model):
     date = models.DateField()
 
     def __str__(self):
-        return self.description
+        return f"{self.description} - {self.value} - {self.date}"
+
+    def save(self, *args, **kwargs):
+        r = Revenue.objects.filter(date__month=self.date.month, date__year=self.date.year, description=self.description)
+        if r.exists():
+            r.description = self.description
+            r.value = self.value
+            r.date = self.date
+        else:
+            return False
+        super(Revenue, self).save(*args, **kwargs)
 
 
 class Expense(models.Model):
@@ -18,4 +28,14 @@ class Expense(models.Model):
     date = models.DateField()
 
     def __str__(self):
-        return self.description
+        return f"{self.description} - {self.value} - {self.date}"
+
+    def save(self, *args, **kwargs):
+        e = Expense.objects.filter(date__month=self.date.month, date__year=self.date.year, description=self.description)
+        if e.exists():
+            e.description = self.description
+            e.value = self.value
+            e.date = self.date
+        else:
+            return False
+        super(Expense, self).save(*args, **kwargs)
