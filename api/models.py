@@ -20,8 +20,11 @@ class Revenue(models.Model):
         return f"{self.description} - {self.value} - {self.date}"
 
     def save(self, *args, **kwargs):
-        if Revenue.objects.filter(description=self.description, date=self.date):
+        if Revenue.objects.filter(description=self.description.lower(), date__month=self.date.month, date__year=self.date.year):
             raise ValueError("Registro Duplicado !")
+        else:
+            super().save(*args, **kwargs)
+        """GAMBIARRAS
         elif not revenue_filter_by_description(self.description):  # Create/Update a registry
             super().save(*args, **kwargs)
         elif Revenue.objects.filter(date__month=self.date.month,
@@ -38,6 +41,7 @@ class Revenue(models.Model):
             super().save(*args, **kwargs)
         else:
             raise ValueError("Erro no Registro !")
+        """
 
 
 def expense_filter_by_description(description):
@@ -51,14 +55,14 @@ def expense_filter_by_date(date):
 class Expense(models.Model):
     OUTRAS = "Outras"
     ESCOLHAS = (
-        ("A", "Alimentação"),
-        ("S", "Saúde"),
-        ("M", "Moradia"),
-        ("T", "Transporte"),
-        ("E", "Educação"),
-        ("L", "Lazer"),
-        ("I", "Imprevistos"),
-        ("O", "Outras")
+        ("Alimentação", "Alimentação"),
+        ("Saúde", "Saúde"),
+        ("Moradia", "Moradia"),
+        ("Transporte", "Transporte"),
+        ("Educação", "Educação"),
+        ("Lazer", "Lazer"),
+        ("Imprevistos", "Imprevistos"),
+        ("Outras", "Outras")
     )
     description = models.CharField(max_length=200, blank=False)
     category = models.CharField(max_length=200, blank=False, choices=ESCOLHAS, default=OUTRAS)
@@ -66,10 +70,15 @@ class Expense(models.Model):
     date = models.DateField(blank=False)
 
     def __str__(self):
-        return f"{self.description} - {self.value} - {self.date}"
+        return f"{self.description} - {self.category} - {self.value} - {self.date}"
 
     def save(self, *args, **kwargs):
-        if Expense.objects.filter(description=self.description, date=self.date):
+        if Expense.objects.filter(description=self.description.lower(), date__year=self.date.year, date__month=self.date.month):
+            raise ValueError("Registro Duplicado !")
+        else:
+            super().save(*args, **kwargs)
+        """GAMBIARRAS
+        if Expense.objects.filter(description=self.description, date__year=self.date.year, date__month=self.date.month):
             raise ValueError("Registro Duplicado !")
         elif not expense_filter_by_description(self.description):  # Create/Update a registry
             super().save(*args, **kwargs)
@@ -87,3 +96,4 @@ class Expense(models.Model):
             super().save(*args, **kwargs)
         else:
             raise ValueError("Erro no Registro !")
+        """
