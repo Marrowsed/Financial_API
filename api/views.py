@@ -1,7 +1,9 @@
-from rest_framework import generics, viewsets
+from django.db.models import Sum
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 
 from api.models import *
@@ -57,3 +59,22 @@ class ExpenseYearMonthList(viewsets.ModelViewSet):
         year = self.kwargs['year']
         month = self.kwargs['month']
         return Expense.objects.filter(date__year=year, date__month=month)
+
+
+class SummaryByMonthYear(APIView):
+    queryset = Revenue.objects.none()
+
+    def get(self, request, year, month):
+        total_revenue = Revenue.objects.filter(date__year=year, date__month=month).aggregate(
+            Sum('value'))['value__sum'] or 0
+        total_expense = Expense.objects.filter(date__year=year, date__month=month).aggregate(
+            Sum('value'))['value__sum'] or 0
+        category_expense = Expense.objects.filter(date__year=year, date__month=month).values('category').annotate(Total_Value=Sum('value'))
+        final_value = total_revenue - total_expense
+
+        return Response({
+            'Receita/Mês': f"R${total_revenue}",
+            'Despesa/Mês': f"R${total_expense}",
+            'Saldo Final/Mês': f"R${final_value}",
+            "Categorias": category_expense
+        })
