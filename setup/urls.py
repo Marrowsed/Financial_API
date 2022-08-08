@@ -26,4 +26,6 @@ router.register(r'expense', views.ExpenseViewSet, basename='expense'),
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path(r'revenue/<int:year>/<int:month>', views.RevenueYearMonthList.as_view({'get': 'list'}), name='revenue-year-month'),
+    path(r'expense/<int:year>/<int:month>', views.ExpenseYearMonthList.as_view({'get': 'list'}), name='expense-year-month'),
 ]
