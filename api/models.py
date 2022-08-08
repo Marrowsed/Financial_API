@@ -49,7 +49,19 @@ def expense_filter_by_date(date):
 
 
 class Expense(models.Model):
+    OUTRAS = "Outras"
+    ESCOLHAS = (
+        ("A", "Alimentação"),
+        ("S", "Saúde"),
+        ("M", "Moradia"),
+        ("T", "Transporte"),
+        ("E", "Educação"),
+        ("L", "Lazer"),
+        ("I", "Imprevistos"),
+        ("O", "Outras")
+    )
     description = models.CharField(max_length=200, blank=False)
+    category = models.CharField(max_length=200, blank=False, choices=ESCOLHAS, default=OUTRAS)
     value = models.FloatField(blank=False)
     date = models.DateField(blank=False)
 
