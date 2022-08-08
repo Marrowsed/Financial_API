@@ -31,6 +31,13 @@ class RevenueViewSet(viewsets.ModelViewSet):
     filterset_fields = ['description']
 
 
+class RevenueYearMonthList(viewsets.ModelViewSet):
+    serializer_class = RevenueSerial
+
+    def get_queryset(self):
+        year = self.kwargs['year']
+        month = self.kwargs['month']
+        return Revenue.objects.filter(date__year=year, date__month=month)
 
 
 class ExpenseViewSet(viewsets.ModelViewSet):
@@ -43,3 +50,10 @@ class ExpenseViewSet(viewsets.ModelViewSet):
     filterset_fields = ['description']
 
 
+class ExpenseYearMonthList(viewsets.ModelViewSet):
+    serializer_class = ExpenseSerial
+
+    def get_queryset(self):
+        year = self.kwargs['year']
+        month = self.kwargs['month']
+        return Expense.objects.filter(date__year=year, date__month=month)
