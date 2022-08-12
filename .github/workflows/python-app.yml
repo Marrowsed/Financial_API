@@ -16,6 +16,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: SECRET_KEY
 
     steps:
     - uses: actions/checkout@v3
