@@ -24,12 +24,12 @@ Your control by:
   <li>GET - Return Info</li>
   <li>POST - Insert Info</li>
   <li>PUT - Update Info</li>
-  <li>DELETE - Delete INFO</li>
+  <li>DELETE - Delete Info</li>
 </ul>
 
 <h1>Endpoints</h1>
 
-<h2 id="receitas">Receitas [GET/POST/PUT/DELETE]</h2>
+<h2 id="receitas">Revenue [GET/POST/PUT/DELETE]</h2>
 <ul><b>Basic Auth</b>
   <li>username</li>
   <li>password</li>
@@ -77,7 +77,7 @@ Your control by:
 }
 ```
 
-<h2 id="expense">Despesas [GET/POST/PUT/DELETE]</h2>
+<h2 id="expense">Expense [GET/POST/PUT/DELETE]</h2>
 
 <ul>
   <li>/expense/ [GET]</li>
@@ -91,18 +91,18 @@ Your control by:
   <li>/expense/?description= [GET]</li>
   <b>Expense by description</b>
 </ul>
-<b> Request Example:</b>
+
+<b> Request example: </b>
   ```json
   [
 	{
-		"description": "Expense Description",
-		"category": "Expense Category",
+		"description": "Revenue Description",
 		"value": 1000,
+                "category": "Food",
 		"date": "25-12-2000"
-	}
+	},
   ]
   ```
-
 <b> 200 Response:</b>
 
   ```json
@@ -135,13 +135,13 @@ Your control by:
 
   ```json
 {
-	"Revenue/Month": "Sum of the Month Revenue",
-	"Expense/Month": "Sum of the Month Expense",
-        "Final": Revenue - Expense
+	"Revenue/Month": 5000
+	"Expense/Month": 2000,
+        "End of the Month": 3000
 	"Category": [
 		{
 			"category": "Category",
-			"Total_Value": "Category Sum"
+			"Total_Value": 500
 		}
 	],
 }
@@ -151,7 +151,7 @@ Your control by:
 ```json
 
 {
-	"detail": "No show"
+	"detail": "No registry"
 }
 
 ```
