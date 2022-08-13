@@ -73,7 +73,7 @@ class Expense(models.Model):
         return f"{self.description} - {self.category} - {self.value} - {self.date}"
 
     def save(self, *args, **kwargs):
-        if Expense.objects.filter(description=self.description.lower(), date__year=self.date.year, date__month=self.date.month):
+        if Expense.objects.filter(description=self.description.lower(), date__year=self.date.year, date__month=self.date.month, category=self.category):
             raise ValueError("Registro Duplicado !")
         else:
             super().save(*args, **kwargs)
