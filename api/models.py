@@ -7,10 +7,6 @@ def revenue_filter_by_description(description):
     return Revenue.objects.filter(description=description).exists()
 
 
-def revenue_filter_by_date(date):
-    return Revenue.objects.filter(date=date).exists()
-
-
 class Revenue(models.Model):
     description = models.CharField(max_length=200, blank=False)
     value = models.FloatField(blank=False)
@@ -21,7 +17,7 @@ class Revenue(models.Model):
 
     def save(self, *args, **kwargs):
         if Revenue.objects.filter(description=self.description.lower(), date__month=self.date.month, date__year=self.date.year):
-            raise ValueError("Registro Duplicado !")
+            raise ValueError("Duplicated !")
         else:
             super().save(*args, **kwargs)
         """GAMBIARRAS
@@ -48,24 +44,20 @@ def expense_filter_by_description(description):
     return Expense.objects.filter(description=description).exists()
 
 
-def expense_filter_by_date(date):
-    return Expense.objects.filter(date=date).exists()
-
-
 class Expense(models.Model):
-    OUTRAS = "Outras"
+    OUTRAS = "Other"
     ESCOLHAS = (
-        ("Alimentação", "Alimentação"),
-        ("Saúde", "Saúde"),
-        ("Moradia", "Moradia"),
-        ("Transporte", "Transporte"),
-        ("Educação", "Educação"),
-        ("Lazer", "Lazer"),
-        ("Imprevistos", "Imprevistos"),
-        ("Outras", "Outras")
+        ("Food", "Food"),
+        ("Health", "Health"),
+        ("Home", "Home"),
+        ("Transport", "Transport"),
+        ("School", "School"),
+        ("Fun", "Fun"),
+        ("Unexpected", "Unexpected"),
+        ("Other", "Other")
     )
     description = models.CharField(max_length=200, blank=False)
-    category = models.CharField(max_length=200, blank=False, choices=ESCOLHAS, default=OUTRAS)
+    category = models.CharField(max_length=200, blank=True, choices=ESCOLHAS, default=OUTRAS)
     value = models.FloatField(blank=False)
     date = models.DateField(blank=False)
 
@@ -74,9 +66,11 @@ class Expense(models.Model):
 
     def save(self, *args, **kwargs):
         if Expense.objects.filter(description=self.description.lower(), date__year=self.date.year, date__month=self.date.month, category=self.category):
-            raise ValueError("Registro Duplicado !")
+            raise ValueError("Duplicated !")
         else:
             super().save(*args, **kwargs)
+        if self.category is None:
+            self.category = "Other"
         """GAMBIARRAS
         if Expense.objects.filter(description=self.description, date__year=self.date.year, date__month=self.date.month):
             raise ValueError("Registro Duplicado !")
