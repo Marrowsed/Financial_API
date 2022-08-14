@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 def revenue_filter_by_description(description):
-    return Revenue.objects.filter(description=description).exists()
+    return Revenue.objects.filter(description__icontains=description).exists()
 
 
 class Revenue(models.Model):
@@ -16,7 +16,7 @@ class Revenue(models.Model):
         return f"{self.description} - {self.value} - {self.date}"
 
     def save(self, *args, **kwargs):
-        if Revenue.objects.filter(description=self.description.lower(), date__month=self.date.month, date__year=self.date.year):
+        if Revenue.objects.filter(description__icontains=self.description, date__month=self.date.month, date__year=self.date.year):
             raise ValueError("Duplicated !")
         else:
             super().save(*args, **kwargs)
@@ -41,7 +41,7 @@ class Revenue(models.Model):
 
 
 def expense_filter_by_description(description):
-    return Expense.objects.filter(description=description).exists()
+    return Expense.objects.filter(description__icontains=description).exists()
 
 
 class Expense(models.Model):
@@ -65,7 +65,7 @@ class Expense(models.Model):
         return f"{self.description} - {self.category} - {self.value} - {self.date}"
 
     def save(self, *args, **kwargs):
-        if Expense.objects.filter(description=self.description.lower(), date__year=self.date.year, date__month=self.date.month, category=self.category):
+        if Expense.objects.filter(description__icontains=self.description, date__year=self.date.year, date__month=self.date.month, category=self.category):
             raise ValueError("Duplicated !")
         else:
             super().save(*args, **kwargs)
