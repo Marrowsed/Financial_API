@@ -1,6 +1,7 @@
 import pytest
 from rest_framework.test import APIClient
 from datetime import datetime
+from api.models import Expense
 
 client = APIClient()
 
@@ -121,6 +122,23 @@ def test_fail_same_expense_month(expense_id):
     )
     if payload['date'] == expense_id.date.strftime("%Y-%m-%d"):
         assert True  # fail condition
+    else:
+        response = client.post("/expense/", payload)
+        assert response.status_code != 201  # proposital failure - can't get here
+
+@pytest.mark.django_db
+def test_fail_case_sensitive(expense_id):
+    """
+    Test to fail creating a registry with same description case insensitive
+    """
+    payload = dict(
+        description="test",
+        category="Other",
+        value=100,
+        date=f"{datetime.now().year}-{datetime.now().month:02}-{datetime.now().day}"
+    )
+    if Expense.objects.filter(description__icontains=payload['description']).exists():
+        assert True
     else:
         response = client.post("/expense/", payload)
         assert response.status_code != 201  # proposital failure - can't get here
