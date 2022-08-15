@@ -91,10 +91,10 @@ class SummaryByMonthYear(APIView):
         final_value = total_revenue - total_expense
 
         return Response({
-            'Receita/Mês': f"R${total_revenue}",
-            'Despesa/Mês': f"R${total_expense}",
-            'Saldo Final/Mês': f"R${final_value}",
-            "Categorias": category_expense
+            'Revenue/Month': f"${total_revenue}",
+            'Expense/Month': f"${total_expense}",
+            'Final Value': f"${final_value}",
+            "Category": category_expense
         })
 
 
