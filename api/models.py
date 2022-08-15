@@ -18,7 +18,7 @@ class Revenue(models.Model):
         return f"{self.description} - {self.value} - {self.date}"
 
     def save(self, *args, **kwargs):
-        if Revenue.objects.filter(description__icontains=self.description, date__month=self.date.month, date__year=self.date.year):
+        if Revenue.objects.filter(description__icontains=self.description, date__month=self.date.month, date__year=self.date.year, user=self.user):
             raise serializers.ValidationError("Duplicated !")
         else:
             super().save(*args, **kwargs)
@@ -68,7 +68,7 @@ class Expense(models.Model):
         return f"{self.description} - {self.category} - {self.value} - {self.date}"
 
     def save(self, *args, **kwargs):
-        if Expense.objects.filter(description__icontains=self.description, date__year=self.date.year, date__month=self.date.month, category=self.category):
+        if Expense.objects.filter(description__icontains=self.description, date__year=self.date.year, date__month=self.date.month, category=self.category, user=self.user):
             raise serializers.ValidationError("Duplicated !")
         else:
             super().save(*args, **kwargs)
