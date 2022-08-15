@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from rest_framework.test import APIClient
 from datetime import datetime
@@ -6,39 +8,61 @@ from api.models import Revenue
 client = APIClient()
 
 
-def test_get_list_expense(revenue_id):
+@pytest.mark.django_db
+def test_register_user():
+    """
+    Test register
+    """
+
+    payload = {
+        "username": "tester",
+        "password": "T3st!ngFun",
+        "password2": "T3st!ngFun",
+        "email": "test@gmail.com",
+        "first_name": "John",
+        "last_name": "Doe"
+    }
+    response = client.post('/register/', data=json.dumps(payload), content_type='application/json')
+
+    assert response.status_code == 201
+
+
+@pytest.mark.django_db
+def test_get_list_revenue(test_user):
     """
     Test to return a list with one revenue registry
     """
-    response = client.get('/revenue/')
+
+    response = client.get('/revenue/', auth=(f"{test_user.username}", f"{test_user.password}"))
     assert response.status_code == 200
 
-    data = response.data
-    assert isinstance(data, list)
-    assert len(data) == 1
+    # data = response.data
+    # assert isinstance(data, list)
+    # assert len(data) == 1
 
 
-def test_get_expense_detail(revenue_id):
+def test_get_expense_detail(revenue_id, test_user):
     """
     Test to return a detail revenue
     """
     detail = revenue_id.id
-    response = client.get(f'/revenue/{detail}/')
+    response = client.get(f'/revenue/{detail}/', auth=(f"{test_user.username}", f"{test_user.password}"))
     assert response.status_code == 200
 
 
-def test_get_list_revenue_year_month(revenue_id):
+def test_get_list_revenue_year_month(revenue_id, test_user):
     """
     Test to return a list with year and month filter
     """
-    response = client.get(f'/revenue/{datetime.now().year}/{datetime.now().month}/')
+    response = client.get(f'/revenue/{datetime.now().year}/{datetime.now().month}/',
+                          auth=(f"{test_user.username}", f"{test_user.password}"))
     assert response.status_code == 200
     data = response.data
     assert len(data) == 1
 
 
 @pytest.mark.django_db
-def test_create_revenue():
+def test_create_revenue(test_user):
     """
     Test for create a registry
     """
@@ -48,13 +72,13 @@ def test_create_revenue():
         date=f"{datetime.now().year}-{datetime.now().month}-01"
     )
 
-    response = client.post("/revenue/", payload)
+    response = client.post("/revenue/", payload, auth=(f"{test_user.username}", f"{test_user.password}"))
     code = response.status_code
     assert code == 201
 
 
 @pytest.mark.django_db
-def test_create_same_description_different_month(revenue_id):
+def test_create_same_description_different_month(revenue_id, test_user):
     """
     Test to create the same registry with same description in another month
     """
@@ -68,12 +92,12 @@ def test_create_same_description_different_month(revenue_id):
     if payload['date'] == revenue_id.date.strftime("%Y-%m-%d"):
         assert True  # fail condition
     else:
-        response = client.post("/revenue/", payload)
+        response = client.post("/revenue/", payload, auth=(f"{test_user.username}", f"{test_user.password}"))
         assert response.status_code == 201
 
 
 @pytest.mark.django_db
-def test_create_same_description_different_year(revenue_id):
+def test_create_same_description_different_year(revenue_id, test_user):
     """
     Test to create the same registry with same description in another year
     """
@@ -87,7 +111,7 @@ def test_create_same_description_different_year(revenue_id):
     if payload['date'] == revenue_id.date.strftime("%Y-%m-%d"):
         assert True  # fail condition
     else:
-        response = client.post("/revenue/", payload)
+        response = client.post("/revenue/", payload, auth=(f"{test_user.username}", f"{test_user.password}"))
         assert response.status_code == 201
 
 
@@ -106,6 +130,7 @@ def test_fail_same_revenue_month(revenue_id):
     else:
         response = client.post("/revenue/", payload)
         assert response.status_code != 201  # proposital failure - can't get here
+
 
 @pytest.mark.django_db
 def test_fail_case_sensitive(revenue_id):
