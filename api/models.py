@@ -8,6 +8,7 @@ def revenue_filter_by_description(description):
 
 
 class Revenue(models.Model):
+    user = models.ForeignKey('auth.User', related_name='revenues', on_delete=models.CASCADE)
     description = models.CharField(max_length=200, blank=False)
     value = models.FloatField(blank=False)
     date = models.DateField(blank=False)
@@ -56,6 +57,7 @@ class Expense(models.Model):
         ("Unexpected", "Unexpected"),
         ("Other", "Other")
     )
+    user = models.ForeignKey('auth.User', related_name='expenses', on_delete=models.CASCADE)
     description = models.CharField(max_length=200, blank=False)
     category = models.CharField(max_length=200, blank=True, choices=ESCOLHAS, default=OUTRAS)
     value = models.FloatField(blank=False)
