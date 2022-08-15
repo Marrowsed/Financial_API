@@ -1,4 +1,5 @@
 from django.db import models
+from rest_framework import serializers
 
 
 # Create your models here.
@@ -18,7 +19,7 @@ class Revenue(models.Model):
 
     def save(self, *args, **kwargs):
         if Revenue.objects.filter(description__icontains=self.description, date__month=self.date.month, date__year=self.date.year):
-            raise ValueError("Duplicated !")
+            raise serializers.ValidationError("Duplicated !")
         else:
             super().save(*args, **kwargs)
         """GAMBIARRAS
@@ -68,7 +69,7 @@ class Expense(models.Model):
 
     def save(self, *args, **kwargs):
         if Expense.objects.filter(description__icontains=self.description, date__year=self.date.year, date__month=self.date.month, category=self.category):
-            raise ValueError("Duplicated !")
+            raise serializers.ValidationError("Duplicated !")
         else:
             super().save(*args, **kwargs)
         if self.category is None:

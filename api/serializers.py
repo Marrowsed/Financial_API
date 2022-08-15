@@ -13,7 +13,7 @@ class RevenueSerial(serializers.ModelSerializer):
 
     class Meta:
         model = Revenue
-        fields = "__all__"
+        fields = ['description', 'value', 'date']
 
 
 class ExpenseSerial(serializers.ModelSerializer):
@@ -23,7 +23,7 @@ class ExpenseSerial(serializers.ModelSerializer):
 
     class Meta:
         model = Expense
-        fields = "__all__"
+        fields = ['description', 'category', 'value', 'date']
 
 
 class UserSerial(serializers.ModelSerializer):
