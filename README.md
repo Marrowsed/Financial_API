@@ -13,6 +13,10 @@
 
 
 <h1>Financial API</h1>
+
+<h1>Try now live !</h1>
+<p>Make a [POST] Request at: <a>https://financial-rest-app.herokuapp.com/register/</a> and use the API !</p> 
+
 Your control by:
 <ul>
   <li><a href="#receitas">Revenues</a></li>
@@ -29,7 +33,46 @@ Your control by:
 
 <h1>Endpoints</h1>
 
+<h2>Register [POST]</h2>
+<p>Create your account for Basic Authentication</p>
+
+<b> Request example: </b>
+
+```json
+  [
+	{
+		"username": "john",
+		"password": "P4ssw0rd",
+		"password2": "P4ssw0rd",
+		"email": "johndoe@doe.com",
+		"first_name": "John",
+		"last_name": "Doe"
+	}
+  ]
+  ```
+
+<b> 201 Return: </b>
+
+```json
+  [
+	{
+		"username": "john",
+		"email": "johndoe@doe.com",
+		"first_name": "John",
+		"last_name": "Doe"
+	}
+  ]
+```
+<b> Bad Request: </b>
+
+```json
+{
+	"detail": "Registry already exists"
+}
+```
+
 <h2 id="receitas">Revenue [GET/POST/PUT/DELETE]</h2>
+
 <ul><b>Basic Auth</b>
   <li>username</li>
   <li>password</li>
@@ -49,17 +92,19 @@ Your control by:
 </ul>
 
 <b> Request example: </b>
+
   ```json
   [
 	{
 		"description": "Revenue Description",
 		"value": 1000,
 		"date": "25-12-2000"
-	},
+	}
   ]
   ```
 
-<b> 200 Return: </b>
+<b> 20x Return: </b>
+
   ```json
   [
 	{
@@ -67,10 +112,11 @@ Your control by:
 		"description": "Revenue Description",
 		"value": 1000,
 		"date": "25-12-2000"
-	},
+	}
   ]
   ```
 <b> Bad Request: </b>
+
 ```json
 {
 	"detail": "Registry already exists"
@@ -78,6 +124,10 @@ Your control by:
 ```
 
 <h2 id="expense">Expense [GET/POST/PUT/DELETE]</h2>
+<ul><b>Basic Auth</b>
+  <li>username</li>
+  <li>password</li>
+</ul>  
 
 <ul>
   <li>/expense/ [GET]</li>
@@ -93,17 +143,18 @@ Your control by:
 </ul>
 
 <b> Request example: </b>
+
   ```json
   [
 	{
-		"description": "Revenue Description",
+		"description": "Expense Description",
 		"value": 1000,
-                "category": "Food",
+		"category": "Food",
 		"date": "25-12-2000"
-	},
+	}
   ]
   ```
-<b> 200 Response:</b>
+<b> 20x Response:</b>
 
   ```json
   [
@@ -118,6 +169,7 @@ Your control by:
   ```
 
 <b> Bad Request: </b>
+
 ```json
 
 {
@@ -128,6 +180,12 @@ Your control by:
 
 <h2>Summary [GET]</h2>
 <p>Summary of the month</p>
+
+<ul><b>Basic Auth</b>
+  <li>username</li>
+  <li>password</li>
+</ul>  
+
 <ul>
   <li>/summary/{yyyy}/{mm} [GET]</li>
 </ul>
@@ -135,19 +193,20 @@ Your control by:
 
   ```json
 {
-	"Revenue/Month": 5000
+	"Revenue/Month": 5000,
 	"Expense/Month": 2000,
-        "End of the Month": 3000
+        "End of the Month": 3000,
 	"Category": [
 		{
 			"category": "Category",
 			"Total_Value": 500
 		}
-	],
+	]
 }
   ```
   
 <b> Bad Request: </b>
+
 ```json
 
 {
