@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY', default='g-sq)oicn!1aa$728sg8gq2czx6fqbiku3z1u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['financial-rest-app.herokuapp.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
