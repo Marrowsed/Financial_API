@@ -1,6 +1,5 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from api import views
 from .views import *
 
 revenue_list = RevenueViewSet.as_view({
@@ -35,14 +34,22 @@ expense_year_month = ExpenseViewSet.as_view({
     'get': 'list'
 })
 
+user_list = UserViewSet.as_view({
+    'get': 'list',
+})
+user_detail = UserViewSet.as_view({
+    'get': 'retrieve',
+})
+
 urlpatterns = [
-    path('', views.api_webhook),
     path('revenue/', revenue_list, name='revenue-list'),
     path('revenue/<int:pk>/', revenue_detail, name='revenue-detail'),
     path('revenue/<int:year>/<int:month>/', revenue_year_month, name='revenue-year-month'),
     path('expense/', expense_list, name='expense-list'),
     path('expense/<int:pk>/', expense_detail, name='expense-detail'),
     path('expense/<int:year>/<int:month>/', expense_year_month, name='expense-year-month'),
+    path('user/', user_list, name='user-list'),
+    path('user/<int:pk>/', user_detail, name='user-detail')
 
 ]
 

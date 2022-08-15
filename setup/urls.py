@@ -22,11 +22,13 @@ from api import views
 router = DefaultRouter()
 router.register(r'revenue', views.RevenueViewSet, basename='revenue'),
 router.register(r'expense', views.ExpenseViewSet, basename='expense'),
+router.register(r'user', views.UserViewSet, basename='expense'),
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path(r'revenue/<int:year>/<int:month>/', views.RevenueYearMonthList.as_view({'get': 'list'}), name='revenue-year-month'),
     path(r'expense/<int:year>/<int:month>/', views.ExpenseYearMonthList.as_view({'get': 'list'}), name='expense-year-month'),
-    path(r'summary/<int:year>/<int:month>/', views.SummaryByMonthYear.as_view(), name="summary-year-month")
+    path(r'summary/<int:year>/<int:month>/', views.SummaryByMonthYear.as_view(), name="summary-year-month"),
+    path(r'register/', views.RegisterUserView.as_view(), name="register-user")
 ]
