@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).parent.parent
 SECRET_KEY = config('SECRET_KEY', default='g-sq)oicn!1aa$728sg8gq2czx6fqbiku3z1u717lh*x@66zj')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['financial-rest-app.herokuapp.com', '127.0.0.1', 'localhost']
 
@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
-    'django_filters'
+    'django_filters',
+    'admin_honeypot'
 ]
 
 MIDDLEWARE = [
