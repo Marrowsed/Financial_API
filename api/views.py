@@ -1,13 +1,10 @@
 from django.db.models import Sum
 from rest_framework import viewsets, generics
-from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 
-from api.models import *
 from api.serializers import *
 
 
