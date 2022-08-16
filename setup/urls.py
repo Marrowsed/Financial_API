@@ -25,7 +25,7 @@ router.register(r'expense', views.ExpenseViewSet, basename='expense'),
 router.register(r'user', views.UserViewSet, basename='expense'),
 
 urlpatterns = [
-    path(r'admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+    path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path('pannel/', admin.site.urls),
     path('', include(router.urls)),
     path(r'revenue/<int:year>/<int:month>/', views.RevenueYearMonthList.as_view({'get': 'list'}), name='revenue-year-month'),

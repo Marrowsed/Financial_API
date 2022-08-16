@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'api',
     'django_filters',
     'admin_honeypot'
+
 ]
 
 MIDDLEWARE = [
