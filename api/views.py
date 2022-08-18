@@ -83,15 +83,27 @@ class SummaryByMonthYear(APIView):
             Sum('value'))['value__sum'] or 0
         total_expense = Expense.objects.filter(date__year=year, date__month=month, user=self.request.user).aggregate(
             Sum('value'))['value__sum'] or 0
-        category_expense = Expense.objects.filter(date__year=year, date__month=month, user=self.request.user).values('category').annotate(
+        category_expense = Expense.objects.filter(date__year=year, date__month=month, user=self.request.user).values(
+            'category').annotate(
             Total_Value=Sum('value'))
+        final_category = []
+        final_sum = 0
+
+        for i in category_expense:
+            """Sum all the Total_Value"""
+            final_sum += i['Total_Value']
+        for c in category_expense:
+            """Append in a list all the Values and %"""
+            final_category.append(
+                f"{c['category']}: ${c['Total_Value']} - {float(c['Total_Value'] / final_sum) * 100:.2f}%")
+
         final_value = total_revenue - total_expense
 
         return Response({
             'Revenue/Month': f"${total_revenue}",
             'Expense/Month': f"${total_expense}",
             'Final Value': f"${final_value}",
-            "Category": category_expense
+            "Category": final_category
         })
 
 

@@ -89,9 +89,17 @@ class RevenueTests(TestCase):
         expense_total = self.expense.value + self.expense2.value + self.expense3.value
         final_value = self.revenue.value - expense_total
         category_expense = Expense.objects.filter(date__year=datetime.now().year, date__month=datetime.now().month,
-                                                  user=self.user).values(
-            'category').annotate(
-            Total_Value=Sum('value'))
+                                                  user=self.user).values('category').annotate(Total_Value=Sum('value'))
+        final_category = []
+        final_sum = 0
+
+        for i in category_expense:
+            """Sum all the Total_Value"""
+            final_sum += i['Total_Value']
+        for c in category_expense:
+            """Append in a list all the Values and %"""
+            final_category.append(
+                f"{c['category']}: ${c['Total_Value']} - {float(c['Total_Value'] / final_sum) * 100:.2f}%")
 
 
 
@@ -99,5 +107,5 @@ class RevenueTests(TestCase):
         assert data['Revenue/Month'] == f"${self.revenue.value}.0"
         assert data['Expense/Month'] == f"${expense_total}.0"
         assert data['Final Value'] == f"${final_value}.0"
-        assert str(data['Category']) == str(category_expense)
+        assert str(data['Category']) == str(final_category)
 

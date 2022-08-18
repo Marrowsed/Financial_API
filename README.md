@@ -179,7 +179,7 @@ Your control by:
 ```
 
 <h2>Summary [GET]</h2>
-<p>Summary of the month</p>
+<p>Summary of the month with the % of expenses by category</p>
 
 <ul><b>Basic Auth</b>
   <li>username</li>
@@ -198,8 +198,8 @@ Your control by:
         "End of the Month": 3000,
 	"Category": [
 		{
-			"category": "Category",
-			"Total_Value": 500
+			"Category": "$500 - 50%", 
+			"Another Category": "$500 - 50%"
 		}
 	]
 }
