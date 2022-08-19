@@ -59,11 +59,9 @@ class RevenueTests(TestCase):
         """
         Testing summary endpoint
         """
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         response = self.csrf_client.get(
             f'/summary/{datetime.now().year}/{datetime.now().month}/',
             HTTP_AUTHORIZATION=auth
@@ -75,11 +73,9 @@ class RevenueTests(TestCase):
         """
         Test calculate summary by year and month
         """
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         response = self.csrf_client.get(
             f'/summary/{datetime.now().year}/{datetime.now().month}/',
             HTTP_AUTHORIZATION=auth

@@ -16,8 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenVerifyView
 
 from api import views
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 router = DefaultRouter()
 router.register(r'revenue', views.RevenueViewSet, basename='revenue'),
@@ -28,6 +34,9 @@ urlpatterns = [
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path('pannel/', admin.site.urls),
     path('', include(router.urls)),
+    path(r'token/', TokenObtainPairView.as_view(), name='register-token'),
+    path(r'token/refresh/', TokenRefreshView.as_view(), name='refresh-token'),
+    path(r'token/verify/', TokenVerifyView.as_view(), name='verify-token'),
     path(r'revenue/<int:year>/<int:month>/', views.RevenueYearMonthList.as_view({'get': 'list'}), name='revenue-year-month'),
     path(r'expense/<int:year>/<int:month>/', views.ExpenseYearMonthList.as_view({'get': 'list'}), name='expense-year-month'),
     path(r'summary/<int:year>/<int:month>/', views.SummaryByMonthYear.as_view(), name="summary-year-month"),

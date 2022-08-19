@@ -34,50 +34,164 @@ Your control by:
 <h1>Endpoints</h1>
 
 <h2>Register [POST]</h2>
-<p>Create your account for Basic Authentication</p>
+<p>Create your account for Bearer Token Generate !</p>
 
 <b> Request example: </b>
 
 ```json
-  [
-	{
-		"username": "john",
-		"password": "P4ssw0rd",
-		"password2": "P4ssw0rd",
-		"email": "johndoe@doe.com",
-		"first_name": "John",
-		"last_name": "Doe"
-	}
-  ]
+[
+  {
+    "username": "john",
+    "password": "P4ssw0rd",
+    "password2": "P4ssw0rd",
+    "email": "johndoe@doe.com",
+    "first_name": "John",
+    "last_name": "Doe"
+  }
+]
   ```
 
 <b> 201 Return: </b>
 
 ```json
-  [
-	{
-		"username": "john",
-		"email": "johndoe@doe.com",
-		"first_name": "John",
-		"last_name": "Doe"
-	}
-  ]
+[
+  {
+    "username": "john",
+    "email": "johndoe@doe.com",
+    "first_name": "John",
+    "last_name": "Doe"
+  }
+]
 ```
 <b> Bad Request: </b>
 
 ```json
-{
-	"detail": "Registry already exists"
-}
+[
+  {
+    "detail": "Registry already exists"
+  }
+]
 ```
+
+<h2>Bearer Token [POST]</h2>
+<p>Access Token and Refresh Token Generator. <b>Each 15 minutes you have to generate a new Access Token.</b></p>
+
+<ul>
+<li>/token/ [POST]</li>
+<b>Generate Access and Refresh Token. If you lose the refresh token, you'll have to generate another</b>
+<b><p>P.S: Refresh Token expires in 1 day !</p></b>
+</ul>
+
+<b> Request example: </b>
+
+```json
+[
+  {
+    "username": "john",
+    "password": "P4ssw0rd"
+  }
+]
+  ```
+
+<b> 20x Return: </b>
+
+  ```json
+  [
+	{
+      "refresh": "YOUR_REFRESH_TOKEN",
+	  "access": "YOUR_ACCESS_TOKEN"
+	}
+  ]
+  ```
+<b> Bad Request: </b>
+
+```json
+[
+  {
+    "detail": "User and/or password incorrect"
+  }
+]
+```
+
+<ul>
+    <li>/token/refresh/ [POST]</li>
+    <p><b>Refresh the expired Access Token !</b></p>
+</ul>
+
+<b> Request example: </b>
+
+```json
+[
+  {
+    "refresh": "YOUR_REFRESH_TOKEN"
+  }
+]
+  ```
+
+<b> 20x Return: </b>
+
+  ```json
+[
+    {
+      "access": "NEW_ACCESS_TOKEN"
+    }
+]
+  ```
+<b> Bad Request: </b>
+
+```json
+[
+ {
+   "detail": "Invalid or expired Token",
+   "code": "token_not_valid"
+ }
+]
+```
+
+<ul>
+    <li>/token/verify/ [POST]</li>
+    <p><b>Verify the Access Token !</b></p>
+</ul>
+
+<b> Request example: </b>
+
+```json
+[
+  {
+    "token": "YOUR_ACCESS_TOKEN"
+  }
+]
+  ```
+
+<b> 200 Return: </b>
+
+  ```json
+[
+    {
+      
+    }
+]
+  ```
+<b> Bad Request: </b>
+
+```json
+[
+ {
+   "detail": "Invalid or expired Token",
+   "code": "token_not_valid"
+ }
+]
+```
+
 
 <h2 id="receitas">Revenue [GET/POST/PUT/DELETE]</h2>
 
-<ul><b>Basic Auth</b>
-  <li>username</li>
-  <li>password</li>
+<h3>Authentication</h3>
+<ul><b>Bearer Token</b>
+  <li>Bearer "YOUR_ACCESS_TOKEN"</li>
 </ul>  
 
+<h3>Endpoints</h3>
 <ul>
   <li>/revenue/ [GET]</li>
   <b>Revenue List</b>
@@ -94,41 +208,46 @@ Your control by:
 <b> Request example: </b>
 
   ```json
-  [
-	{
-		"description": "Revenue Description",
-		"value": 1000,
-		"date": "25-12-2000"
-	}
-  ]
+[
+    {
+      "description": "Revenue Description",
+      "value": 1000,
+      "date": "2000-12-25"
+    }
+]
   ```
 
 <b> 20x Return: </b>
 
   ```json
-  [
-	{
-		"id": "Revenue ID",
-		"description": "Revenue Description",
-		"value": 1000,
-		"date": "25-12-2000"
-	}
-  ]
+[
+    {
+      "id": "Revenue ID",
+      "description": "Revenue Description",
+      "value": 1000,
+      "date": "2000-12-25"
+    }
+]
   ```
 <b> Bad Request: </b>
 
 ```json
-{
-	"detail": "Registry already exists"
-}
+[
+  {
+    "detail": "Registry already exists"
+  }
+]
 ```
 
 <h2 id="expense">Expense [GET/POST/PUT/DELETE]</h2>
-<ul><b>Basic Auth</b>
-  <li>username</li>
-  <li>password</li>
+<p>Categories Available: Food, Health, Home, Transport, School, Fun, Unexpected, Other</p>
+
+<h3>Authentication</h3>
+<ul><b>Bearer Token</b>
+  <li>Bearer "YOUR_ACCESS_TOKEN"</li>
 </ul>  
 
+<h3>Endpoints</h3>
 <ul>
   <li>/expense/ [GET]</li>
   <b>Expense List</b>
@@ -145,73 +264,75 @@ Your control by:
 <b> Request example: </b>
 
   ```json
-  [
-	{
-		"description": "Expense Description",
-		"value": 1000,
-		"category": "Food",
-		"date": "25-12-2000"
-	}
-  ]
+[
+    {
+      "description": "Expense Description",
+      "value": 1000,
+      "category": "Food",
+      "date": "2000-12-25"
+    }
+]
   ```
 <b> 20x Response:</b>
 
   ```json
-  [
-	{
-		"id": "Expense ID",
-		"description": "Expense Description",
-		"category": "Expense Category",
-		"value": 1000,
-		"date": "25-12-2000"
-	}
-  ]
+[
+    {
+      "id": "Expense ID",
+      "description": "Expense Description",
+      "category": "Expense Category",
+      "value": 1000,
+      "date": "2000-12-25"
+    }
+]
   ```
 
 <b> Bad Request: </b>
 
 ```json
-
-{
-	"detail": "Registry already exists"
-}
-
+[
+  {
+    "detail": "Registry already exists"
+  }
+]
 ```
 
 <h2>Summary [GET]</h2>
 <p>Summary of the month with the % of expenses by category</p>
 
-<ul><b>Basic Auth</b>
-  <li>username</li>
-  <li>password</li>
+<h3>Authentication</h3>
+<ul><b>Bearer Token</b>
+  <li>Bearer "YOUR_ACCESS_TOKEN"</li>
 </ul>  
 
+<h3>Endpoints</h3>
 <ul>
   <li>/summary/{yyyy}/{mm} [GET]</li>
 </ul>
 <b> 200 Example:</b>
 
   ```json
-{
-	"Revenue/Month": 5000,
-	"Expense/Month": 2000,
-        "End of the Month": 3000,
-	"Category": [
-		{
-			"Category": "$500 - 50%", 
-			"Another Category": "$500 - 50%"
-		}
-	]
-}
+[
+    {
+      "Revenue/Month": 5000,
+      "Expense/Month": 2000,
+      "Final Value": 3000,
+      "Category": [
+        "Category: $500 - 50%", 
+        "Another Category: $500 - 50%"
+      ]
+    }
+]
   ```
   
 <b> Bad Request: </b>
 
 ```json
-
-{
-	"detail": "No registry"
-}
+[
+  {
+    "detail": "No registry"
+  }
+]
 
 ```
 
@@ -220,9 +341,9 @@ Your control by:
 
 <h2>Dependencies</h2>
 
-````sh
+```sh
 pip install -r requirements.txt
-````
+```
 
 <h1> Config </h1>
 <ol>

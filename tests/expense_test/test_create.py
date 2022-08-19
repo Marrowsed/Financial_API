@@ -53,11 +53,9 @@ class ExpenseTests(TestCase):
         """
         Test to return a list
         """
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         response = self.csrf_client.get(
             '/expense/',
             HTTP_AUTHORIZATION=auth
@@ -69,11 +67,9 @@ class ExpenseTests(TestCase):
         """
         Test to return a detail registry
         """
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         response = self.csrf_client.get(
             f'/expense/{self.expense.id}/',
             HTTP_AUTHORIZATION=auth
@@ -85,11 +81,9 @@ class ExpenseTests(TestCase):
         """
         Test to return a registry description
         """
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         response = self.csrf_client.get(
             f'/expense/?description={self.expense.description}/',
             HTTP_AUTHORIZATION=auth
@@ -101,11 +95,9 @@ class ExpenseTests(TestCase):
         """
         Test to return a list with year and month filter
         """
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         response = self.csrf_client.get(
             f'/expense/{datetime.now().year}/{datetime.now().month}/',
             HTTP_AUTHORIZATION=auth
@@ -113,15 +105,27 @@ class ExpenseTests(TestCase):
         assert response.status_code == 200
 
     @pytest.mark.django_db
+    def test_delete_expense_detail(self):
+        """
+        Test to delete a detail registry
+        """
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
+        response = self.csrf_client.delete(
+            f'/expense/{self.expense.id}/',
+            HTTP_AUTHORIZATION=auth
+        )
+        assert response.status_code == 204
+
+    @pytest.mark.django_db
     def test_post_expense(self):
         """
         Test to POST a registry
         """
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         response = self.csrf_client.post(
             '/expense/',
             {'description': 'Test', 'value': 1, 'category': 'Food', 'date': '2022-01-01'},
@@ -135,11 +139,9 @@ class ExpenseTests(TestCase):
         """
         Test to POST a registry
         """
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         response = self.csrf_client.post(
             '/expense/',
             {'description': 'Test', 'value': 1, 'date': '2022-01-01'},
@@ -154,11 +156,9 @@ class ExpenseTests(TestCase):
         Test to create the same registry with same description in another month
         """
         month = int(datetime.now().month) + 1
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         self.csrf_client.post(
             f'/expense/',
             {'description': 'Test', 'value': 1, 'category': 'Food', 'date': f'{datetime.now().year}-{month:02}-01'},
@@ -179,11 +179,9 @@ class ExpenseTests(TestCase):
         Test to create the same registry with same description in another month
         """
         year = int(datetime.now().year) + 1
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         self.csrf_client.post(
             f'/expense/',
             {'description': 'Test', 'value': 1, 'category': 'Transport', 'date': f'{year}-{datetime.now().month}-01'},
@@ -199,15 +197,95 @@ class ExpenseTests(TestCase):
         assert response.status_code == 201
 
     @pytest.mark.django_db
+    def test_fail_delete_expense_detail_twice(self):
+        """
+        Test to delete a detail registry twice
+        """
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
+        self.csrf_client.delete(
+            f'/expense/{self.expense.id}/',
+            HTTP_AUTHORIZATION=auth
+        )
+        response = self.csrf_client.delete(
+            f'/expense/{self.expense.id}/',
+            HTTP_AUTHORIZATION=auth
+        )
+        assert response.status_code == 404 #Not found
+
+    @pytest.mark.django_db
+    def test_fail_expense_without_description(self):
+        """
+        Test fail registry without description
+        """
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
+        response = self.csrf_client.post(
+            '/expense/',
+            {'description': '', 'value': 1, 'category': 'Food', 'date': '2022-01-01'},
+            format='json',
+            HTTP_AUTHORIZATION=auth
+        )
+        assert response.status_code == 400
+
+    @pytest.mark.django_db
+    def test_fail_expense_without_value(self):
+        """
+        Test fail registry without value
+        """
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
+        response = self.csrf_client.post(
+            '/expense/',
+            {'description': 'Test', 'value': "", 'category': 'Food', 'date': '2022-01-01'},
+            format='json',
+            HTTP_AUTHORIZATION=auth
+        )
+        assert response.status_code == 400
+
+    @pytest.mark.django_db
+    def test_fail_expense_without_date(self):
+        """
+        Test fail registry without date
+        """
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
+        response = self.csrf_client.post(
+            '/expense/',
+            {'description': 'Test', 'value': 1, 'category': 'Food', 'date': ''},
+            format='json',
+            HTTP_AUTHORIZATION=auth
+        )
+        assert response.status_code == 400
+
+    @pytest.mark.django_db
+    def test_fail_expense_with_different_date_format(self):
+        """
+        Test fail registry with different date format
+        """
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
+        response = self.csrf_client.post(
+            '/expense/',
+            {'description': 'Test', 'value': 1, 'category': 'Food', 'date': '01-01-2022'},
+            format='json',
+            HTTP_AUTHORIZATION=auth
+        )
+        assert response.status_code == 400
+
+    @pytest.mark.django_db
     def test_fail_post_same_description_month(self):
         """
         Test to create the same registry with same description in another month
         """
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         self.csrf_client.post(
             f'/revenue/',
             {'description': 'Test', 'value': 1, 'category': 'Transport', 'date': f'{datetime.now().year}-{datetime.now().month}-01'},
@@ -227,11 +305,9 @@ class ExpenseTests(TestCase):
         """
         Test to create the same registry case insensitive
         """
-        credentials = ('%s:%s' % (self.username, self.password))
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-        auth = 'Basic %s' % base64_credentials
+        bearer = self.csrf_client.post('/token/', data={'username': f'{self.username}', 'password': f'{self.password}'})
+        token = bearer.data
+        auth = f"Bearer {token['access']}"
         self.csrf_client.post(
             f'/revenue/',
             {'description': 'Test', 'value': 1, 'date': f'{datetime.now().year}-{datetime.now().month}-01'},
