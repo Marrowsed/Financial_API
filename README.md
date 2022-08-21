@@ -15,7 +15,10 @@
 <h1>Financial API</h1>
 
 <h1>Try now live !</h1>
-<p>Make a [POST] Request at: <a>https://financial-rest-app.herokuapp.com/register/</a> and use the API !</p> 
+<p>Make a [POST] Request at: <a>https://financial-rest-app.herokuapp.com/register/</a> and get your <a href="#jwt">Token</a> !</p>
+
+<h1>Swagger Generated Doc:</h1>
+<a href="https://financial-rest-app.herokuapp.com/doc/">Pretty Doc</a>
 
 Your control by:
 <ul>
@@ -73,7 +76,9 @@ Your control by:
 ]
 ```
 
-<h2>Bearer Token [POST]</h2>
+<h2 id="jwt">Bearer Token [POST]</h2>
+<p> <a href="https://jwt.io/introduction">What is a Bearer Token ?</a></p>
+
 <p>Access Token and Refresh Token Generator. <b>Each 15 minutes you have to generate a new Access Token.</b></p>
 
 <ul>
