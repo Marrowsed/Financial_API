@@ -4,6 +4,15 @@
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
+
+| :placard: Vitrine.Dev |     |
+| -------------  | --- |
+| :sparkles: Nome        | Financial API
+| :label: Tecnologias | python, django, django-rest, postgresql
+| :rocket: URL         | https://financial-rest-app.herokuapp.com/
+| :fire: Desafio     | https://www.alura.com.br/challenges/back-end-4?host=https://cursos.alura.com.br
+
+
 <h1>Tecnologies and Frameworks</h1>
 <img src="https://www.django-rest-framework.org/img/logo.png" alt="Django Rest Framework">
 <ul>
