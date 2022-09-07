@@ -14,7 +14,7 @@
 
 
 <h1>Tecnologies and Frameworks</h1>
-<img src="https://www.django-rest-framework.org/img/logo.png" alt="Django Rest Framework">
+<img src="https://www.django-rest-framework.org/img/logo.png#vitrinedev" alt="Django Rest Framework">
 <ul>
 <li><a href="https://www.djangoproject.com/" target="_blank">Django</a> - O propósito do Django está no desenvolvimento de aplicações web e sites.</li>
 <li><a href="https://www.django-rest-framework.org/" target="_blank">Django Rest Framework</a> - Desenvolvimento de web API'S de forma simples e ágil.</li>
